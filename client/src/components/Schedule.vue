@@ -7,6 +7,9 @@
     <div class="btn-group" role="group" style="margin-bottom:10px">
         <div v-for="n in eventLengthDays"
             v-bind:key="n"
+            class="btn-group"
+            role="group"
+            style="margin-bottom:10px"
         >
         <button class="btn btn-dark" v-on:click="changeDay(n)">Day {{n}}</button>
         </div>
@@ -69,7 +72,6 @@ export default {
       }).format(this.event.endDate);
 
       this.eventLengthDays = Math.ceil((this.event.endDate - this.event.startDate)/(36e5 * 24)) + 1
-
     });
   },
   methods: {

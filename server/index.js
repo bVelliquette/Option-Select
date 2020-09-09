@@ -3,10 +3,10 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const scheduleRouter = require("./routes/schedule");
 const gameRouter = require("./routes/game");
+const config = require("./config")
 
-//Connect Mongoose ((OBSURE ATLAS URI BEFORE LAUNCHING))
 mongoose.connect(
-  "mongodb+srv://visitor:3X6s7MWVbcVkblYV@cluster0.ndph3.mongodb.net/OptionSelect?retryWrites=true&w=majority",
+  config.uri,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
