@@ -8,7 +8,7 @@
       <iframe
         height="720"
         width="1280"
-        :src="`https://player.twitch.tv/?channel=`+ `${channel.link}&parent=localhost`"
+        :src="`https://player.twitch.tv/?channel=`+ `${channel.link}&parent=option-select.herokuapp.com`"
         frameborder="0"
         scrolling="no"
         allowfullscreen="true"
