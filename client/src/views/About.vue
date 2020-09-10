@@ -1,7 +1,8 @@
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
-    <div class="scrollbait"></div>
+    <h1>About Page</h1>
+    <img src="monkeyconstruction.jpg" alt loading="lazy"/>
+    <p>Under Construction</p>
   </div>
 </template>
 
@@ -12,10 +13,5 @@
 </script>
 
 <style scoped>
-
-.scrollbait{
-  height: 200vh;
-  background-color: #8458B3
-}
 
 </style>

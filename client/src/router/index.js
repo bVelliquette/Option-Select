@@ -5,6 +5,7 @@ import NotFound from "../views/NotFound.vue";
 import About from "../views/About.vue";
 import News from "../views/News.vue";
 import Events from "../views/Events.vue";
+import Dev from "../views/Dev.vue";
 
 
 Vue.use(VueRouter);
@@ -29,6 +30,11 @@ const routes = [
     path: "/news",
     name: "News",
     component: News
+  },
+  {
+    path: "/dev",
+    name: "Dev",
+    component: Dev
   },
   {
     path:"*",

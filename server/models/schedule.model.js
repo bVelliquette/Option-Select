@@ -11,6 +11,7 @@ var schedSchema = new Schema({
     {
       name: { type: String, required: true },
       link: { type: String, required: true },
+      website: { type: String, required: true },
       blocks: [
         {
           name: { type: String, required: true },

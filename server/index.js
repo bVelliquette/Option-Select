@@ -6,7 +6,7 @@ const gameRouter = require("./routes/game");
 const config = require("./config")
 
 mongoose.connect(
-  config.uri,
+  process.env.URI || config.uri,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
