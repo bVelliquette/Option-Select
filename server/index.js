@@ -3,15 +3,13 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const scheduleRouter = require("./routes/schedule");
 const gameRouter = require("./routes/game");
-//const config = require("./config")
+//const config = require("./config");
 
-mongoose.connect(
-  process.env.URI || config.uri,
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  }
-);
+
+mongoose.connect(process.env.URI || config.uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 const app = express();
 
@@ -19,20 +17,17 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-
 app.use("/api/schedule", scheduleRouter);
 app.use("/api/game", gameRouter);
 
 //Handle Production
-if(process.env.NODE_ENV === 'production')
-{
+if (process.env.NODE_ENV === "production") {
   //Static folder
-  app.use(express.static(__dirname + '/public'));
+  app.use(express.static(__dirname + "/public"));
 
   //Handle SPA
-  app.get(/.*/, (req,res)=> res.sendFile(__dirname + 'public/index.html'));
+  app.get(/.*/, (req, res) => res.sendFile(__dirname + "public/index.html"));
 }
-
 
 const port = process.env.PORT || 5000;
 
