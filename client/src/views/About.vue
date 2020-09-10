@@ -1,7 +1,7 @@
 <template>
   <div class="about">
     <h1>About Page</h1>
-    <img src="monkeyconstruction.jpg" alt loading="lazy"/>
+    <img class="img-fluid" src="monkeyconstruction.jpg" alt loading="lazy"/>
     <p>Under Construction</p>
   </div>
 </template>

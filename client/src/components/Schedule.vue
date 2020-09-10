@@ -23,6 +23,13 @@
         class="contentWindow"
         :style="`grid-row: 1/${event.channels.length+3};grid-template-columns: repeat(${timelineSize}, 40px)`"
       >
+      <div :style="`grid-row:1; grid-column:1/-1; background-color:#000; border-bottom: solid thick white`"/>
+        <div
+          class="spacerBlock"
+          v-for="i in event.channels.length"
+          :key="i"
+          :style="`grid-row:${i+1}/${i+2}; grid-column:1/-1`"
+        ></div>
         <div v-for="n in timelineSize" :key="n" :style="timelineStyle(n)">{{ returnTime(n) }}</div>
         <template v-for="(channel, i) in event.channels">
           <div
@@ -125,6 +132,8 @@ export default {
   grid-template-columns: 1fr 10fr;
   grid-template-rows: 40px;
   grid-auto-rows: auto;
+  border: solid white thin;
+  border-radius:5px;
 }
 
 .channelLabel {
@@ -156,6 +165,13 @@ export default {
   grid-template-rows: 40px;
   grid-auto-rows: auto;
   display: grid;
+}
+.spacerBlock {
+  height: 104px;
+  background-color: #111;
+}
+.spacerBlock:nth-child(odd){
+  background: #222;
 }
 .timeBlock {
   background-color: #8458b3;
