@@ -95,21 +95,21 @@ export default {
 }
 @keyframes sViewIn {
   0% {
-    opacity: 0%;
+    opacity: 0;
     left: -100vw;
   }
   100% {
-    opacity: 100%;
+    opacity: 1;
     left: 14vw;
   }
 }
 @keyframes sViewOut {
   0% {
-    opacity: 100%;
+    opacity: 1;
     left: 14vw;
   }
   100% {
-    opacity: 0%;
+    opacity: 0;
     left: -100vw;
   }
 }
