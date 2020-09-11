@@ -14,6 +14,7 @@
     />
 
     <Schedule
+      if="schedule"
       class="scheduleWindow"
       v-if="eventExists"
       v-bind:event="event"
@@ -64,7 +65,7 @@ export default {
     },
     async clear() {
       this.clearing = true;
-      let elmnt = document.getElementById("app");
+      let elmnt = document.getElementById("schedule");
       elmnt.scrollIntoView({ behavior: "smooth" });
       await new Promise(r => setTimeout(r, 300)); //Give the window a chance to animate out before clearing
       this.currentStream = "";
