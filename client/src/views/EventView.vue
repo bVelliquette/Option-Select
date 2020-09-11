@@ -65,7 +65,7 @@ export default {
     },
     async clear() {
       this.clearing = true;
-      let elmnt = document.getElementById("schedule");
+      let elmnt = document.getElementById("app");
       elmnt.scrollIntoView({ behavior: "smooth" });
       await new Promise(r => setTimeout(r, 300)); //Give the window a chance to animate out before clearing
       this.currentStream = "";
