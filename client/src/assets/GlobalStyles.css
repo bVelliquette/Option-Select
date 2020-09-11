@@ -1,11 +1,12 @@
 .bg-dark {
-    background-color: #494D5F !important;
-  }
+  background-color: #141414 !important;
+}
 
 .navbar-brand {
-    color: #E5EAF5 !important
+  color: #e5eaf5 !important;
 }
 
 .nav-link {
-    color: #E5EAF5 !important
+  color: #e5eaf5 !important;
 }
+

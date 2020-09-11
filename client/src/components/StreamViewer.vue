@@ -1,13 +1,13 @@
 <template>
-  <div>
-    <div class="streamView">
+  <div class="viewerWindow">
+    <div>
       <h1>{{channel.name}}</h1>
-      <h3>{{channel.link}}</h3>
-      <button class="btn btn-light myButton" v-on:click="$emit('clear')">close</button>
-
+    </div>
+    <button class="btn btn-dark myButton bg-danger" v-on:click="$emit('clear')">X</button>
+    <div class="playerCont">
       <iframe
-        height="720"
-        width="1280"
+        width="100%"
+        height="100%"
         :src="`https://player.twitch.tv/?channel=`+ `${channel.link}&parent=option-select.herokuapp.com`"
         frameborder="0"
         scrolling="no"
@@ -25,13 +25,21 @@ export default {
 </script>
 
 <style scoped>
-.streamView {
-  height: minmax(50vh, auto);
-  position: relative;
+.playerCont {
+  width: 72vw;
+  height: 40.5vw;
+}
+.viewerWindow {
+  border: 3px #8458b3 solid;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #111;
 }
 .myButton {
   position: absolute;
-  top: 0px;
-  right: 30%;
+  top: 3px;
+  right: 3px;
+  border-radius: 20%;
+  opacity: 70%;
 }
 </style>

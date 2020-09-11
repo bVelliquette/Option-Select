@@ -3,7 +3,7 @@
     <div class="btn-group" role="group" style="margin-bottom:10px">
       <div
         v-for="n in eventLengthDays"
-        v-bind:key="n"
+        v-bind:key="`day${n}`"
         class="btn-group"
         role="group"
         style="margin-bottom:10px"
@@ -21,13 +21,15 @@
       >{{ `${channel.name}`}}</div>
       <div
         class="contentWindow"
-        :style="`grid-row: 1/${event.channels.length+3};grid-template-columns: repeat(${timelineSize}, 40px)`"
+        :style="`grid-row: 1/${event.channels.length+3};grid-template-columns: repeat(${timelineSize}, 1.5vw)`"
       >
-      <div :style="`grid-row:1; grid-column:1/-1; background-color:#000; border-bottom: solid thick white`"/>
+        <div
+          :style="`grid-row:1; grid-column:1/-1; background-color:#080808; border-bottom: solid thick #666;`"
+        />
         <div
           class="spacerBlock"
           v-for="i in event.channels.length"
-          :key="i"
+          :key="`space${i}`"
           :style="`grid-row:${i+1}/${i+2}; grid-column:1/-1`"
         ></div>
         <div v-for="n in timelineSize" :key="n" :style="timelineStyle(n)">{{ returnTime(n) }}</div>
@@ -85,8 +87,7 @@ export default {
 
       return {
         "grid-row": `${channelIndex + 2}`,
-        "grid-column": `${start}/${end}`,
-        margin: "2px"
+        "grid-column": `${start}/${end}`
       };
     },
     changeDay(newDay) {
@@ -96,10 +97,13 @@ export default {
       var style = {
         "grid-row": `1/${this.event.channels.length + 2}`,
         "grid-column": `${n}`,
-        "border-right": "thin dashed grey",
+        "border-right": "2px dashed #383838",
         "white-space": "nowrap"
       };
-      if (n % 4 == 0) style["border-right"] = "thick dashed grey";
+      if (n % 4 == 0) style["border-right"] = "4px dashed #383838";
+      else if (n % 4 == 1 || n % 4 == 3) {
+        style["border-right"] = "1px dashed #282828";
+      }
       return style;
     },
     returnTime(n) {
@@ -129,15 +133,16 @@ export default {
 .mainGridContainer {
   margin: 1em;
   display: grid;
+  background-color: #080808;
   grid-template-columns: 1fr 10fr;
   grid-template-rows: 40px;
   grid-auto-rows: auto;
-  border: solid white thin;
-  border-radius:5px;
+  border: 3px #8458b3 solid;
+  border-radius: 20px;
+  overflow: hidden;
 }
 
 .channelLabel {
-  border: blueviolet thin solid;
   border-radius: 5px;
   padding: 0.5em;
   grid-column: 1;
@@ -157,6 +162,9 @@ export default {
   background: #181818;
   cursor: pointer;
 }
+.channelLabel:active {
+  box-shadow: inset 3px 3px 3px 0px rgba(0, 0, 0, 0.75);
+}
 .contentWindow {
   grid-column: 2;
   border-radius: 5px !important;
@@ -170,40 +178,39 @@ export default {
   height: 104px;
   background-color: #111;
 }
-.spacerBlock:nth-child(odd){
+.spacerBlock:nth-child(odd) {
   background: #222;
 }
 .timeBlock {
   background-color: #8458b3;
   font-size: 16pt;
   border-radius: 10px;
-  height: 100px;
+  height: 80px;
+  margin: 0px 5px;
+  align-self: center;
+  box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, 0.75);
   color: black;
 }
 .timeBlock:nth-child(3n + 1) {
   background-color: #a0d2eb;
-  color: black;
 }
 .timeBlock:nth-child(3n + 2) {
   background-color: #e5eaf5;
-  color: black;
 }
 .timeBlock:hover {
   background-color: #8d65b8;
-  font-size: 16pt;
-  border-radius: 10px;
-  height: 100px;
-  color: black;
+  height: 85px;
+  margin: 0px 3px;
   cursor: pointer;
 }
 .timeBlock:nth-child(3n + 1):hover {
   background-color: #bcdff1;
-  color: black;
-  cursor: pointer;
 }
 .timeBlock:nth-child(3n + 2):hover {
-  background-color: #ffffff;
-  color: black;
-  cursor: pointer;
+  background-color: #fff;
+}
+
+.timeBlock:active {
+  box-shadow: inset 3px 3px 3px 0px rgba(0, 0, 0, 0.75);
 }
 </style>
