@@ -21,7 +21,7 @@
       >{{ `${channel.name}`}}</div>
       <div
         class="contentWindow"
-        :style="`grid-row: 1/${event.channels.length+3};grid-template-columns: repeat(${timelineSize}, 1.5vw)`"
+        :style="`grid-row: 1/${event.channels.length+3};grid-template-columns: repeat(${timelineSize}, minmax(20px,auto)`"
       >
         <div
           :style="`grid-row:1; grid-column:1/-1; background-color:#080808; border-bottom: solid thick #666;`"
@@ -45,7 +45,7 @@
             :style="blockParams(i,block)"
             v-on:click="$emit('open',channel)"
             class="timeBlock"
-          >{{block.name}}</div>
+          ><p>{{block.name}}</p><p>{{block.game.name}}</p></div>
         </template>
       </div>
     </div>
@@ -183,13 +183,14 @@ export default {
 }
 .timeBlock {
   background-color: #8458b3;
-  font-size: 16pt;
   border-radius: 10px;
   height: 80px;
   margin: 0px 5px;
   align-self: center;
   box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, 0.75);
   color: black;
+  font-size: 100%;
+  overflow: hidden;
 }
 .timeBlock:nth-child(3n + 1) {
   background-color: #a0d2eb;

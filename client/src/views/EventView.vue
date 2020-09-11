@@ -3,7 +3,7 @@
     <div v-if="eventExists">
       <h1>{{event.name}}</h1>
       <p>{{event.description}}</p>
-      <h4>{{`${event.startDate.getMonth()+1}/${event.startDate.getDate()}/${event.startDate.getFullYear()} - ${event.endDate.getMonth()+1}/${event.endDate.getDate()}/${event.endDate.getFullYear()}`}}</h4>
+      <h4>{{`${event.startDate.getUTCMonth()+1}/${event.startDate.getUTCDate()}/${event.startDate.getUTCFullYear()} - ${event.endDate.getUTCMonth()+1}/${event.endDate.getUTCDate()}/${event.endDate.getUTCFullYear()}`}}</h4>
     </div>
     <StreamViewer
       id="viewer"
@@ -29,7 +29,7 @@ import StreamViewer from "../components/StreamViewer";
 import axios from "axios";
 
 export default {
-  name: "Dev",
+  name: "EventView",
   components: {
     Schedule,
     StreamViewer
@@ -44,8 +44,11 @@ export default {
     };
   },
   async created() {
-    await axios.get("api/schedule/all").then(res => {
-      this.event = res.data[0];
+    var id;
+    if(this.$route.params.id) id = this.$route.params.id;
+    else id='5f5a242678519e1928bda957';
+    await axios.get(`/api/schedule/find/${id}`).then(res => {
+      this.event = res.data;
       this.eventExists = true;
       this.event.startDate = new Date(this.event.startDate);
       this.event.endDate = new Date(this.event.endDate);

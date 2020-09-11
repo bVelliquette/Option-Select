@@ -4,8 +4,9 @@ import Home from "../views/Home.vue";
 import NotFound from "../views/NotFound.vue";
 import About from "../views/About.vue";
 import News from "../views/News.vue";
-import Events from "../views/Events.vue";
+import Events from "../views/EventView.vue";
 import Dev from "../views/Dev.vue";
+import EventBrowser from "../views/EventBrowser.vue";
 
 
 Vue.use(VueRouter);
@@ -23,7 +24,12 @@ const routes = [
   },
   {
     path: "/events",
-    name: "Events",
+    name: "EventBrowser",
+    component: EventBrowser
+  },
+  {
+    path: "/events/:id",
+    name: "EventsWithParam",
     component: Events
   },
   {

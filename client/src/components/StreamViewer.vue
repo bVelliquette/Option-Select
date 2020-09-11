@@ -40,6 +40,6 @@ export default {
   top: 3px;
   right: 3px;
   border-radius: 20%;
-  opacity: 70%;
+  opacity: .7;
 }
 </style>

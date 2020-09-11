@@ -11,12 +11,20 @@ router.route("/all").get((req, res) => {
 
 router.route("/all/full").get((req, res) => {
   Schedule.find()
-    .populate("dailySchedule.channels.blocks.game")
+    .populate("channels.blocks.game")
     .exec((err, scheds) => {
         if (err) res.status(400).send(err);
         else res.status(200).json(scheds);
     });
 });
+
+router.route("/find/:id").get((req,res) => {
+  Schedule.findById(req.params.id).populate("channels.blocks.game")
+  .exec((err, sched) => {
+    if (err) res.status(400).send(err);
+    else res.status(200).json(sched);
+  })
+})
 
 router.route("/add").post((req, res) => {
   let schedule = new Schedule(req.body);
