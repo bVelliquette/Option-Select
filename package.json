@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server/index.js",
-    "dev": "concurrently \"nodemon server/index.js\"  \"cd client && npm run serve && cd ..\"",
-    "build": "cd client && npm run build && cd .."
+    "dev": "concurrently \"nodemon server/index.js\"  \"cd client && npm run serve && cd ..\""
   },
   "author": "Benjamin Velliquette",
   "license": "MIT",
