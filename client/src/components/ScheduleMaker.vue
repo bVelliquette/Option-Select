@@ -45,7 +45,7 @@
           })"
             :key="block._id"
             :style="blockParams(i,block)"
-            v-on:click="$emit('open',channel)"
+            v-on:click="$emit('editBlock',block)"
             :ref="'block'"
             class="timeBlock"
           >
@@ -60,7 +60,7 @@
 
 <script>
 export default {
-  name: "Schedule",
+  name: "ScheduleMaker",
   props: ["event"],
   data() {
     return {

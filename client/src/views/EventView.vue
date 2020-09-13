@@ -15,7 +15,7 @@
     />
     <div class="wrapper">
       <Schedule
-        if="schedule"
+        id="schedule"
         class="scheduleContainer"
         v-if="eventExists"
         v-bind:event="event"
@@ -91,7 +91,7 @@ export default {
   position: absolute;
 }
 .scheduleContainer {
-  padding-top: 20px;
+  padding-top: 2em;
   position: relative;
 }
 .viewerContainer {
