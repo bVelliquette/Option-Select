@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>New Component Testing Ground</h1>
-    <ScheduleMaker id="schedule" v-on:editBlock="editBlock" v-bind:event="event" />
+    <ScheduleMaker id="schedule" v-on:edit-block="editBlock" v-bind:event="event" />
   </div>
 </template>
 

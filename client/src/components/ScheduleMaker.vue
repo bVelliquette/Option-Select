@@ -45,7 +45,7 @@
           })"
             :key="block._id"
             :style="blockParams(i,block)"
-            v-on:click="$emit('editBlock',block)"
+            v-on:click="$emit('edit-block',block)"
             :ref="'block'"
             class="timeBlock"
           >
