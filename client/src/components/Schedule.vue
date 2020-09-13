@@ -21,7 +21,7 @@
       >{{ `${channel.name}`}}</div>
       <div
         class="contentWindow"
-        :style="`grid-row: 1/${event.channels.length+3};grid-template-columns: repeat(${timelineSize}, minmax(20px,auto)`"
+        :style="`grid-row: 1/${event.channels.length+3};grid-template-columns: repeat(${timelineSize}, minmax(20px,auto))`"
       >
         <div
           :style="`grid-row:1; grid-column:1/-1; background-color:#080808; border-bottom: solid thick #666;`"
@@ -45,7 +45,10 @@
             :style="blockParams(i,block)"
             v-on:click="$emit('open',channel)"
             class="timeBlock"
-          ><p>{{block.name}}</p><p>{{block.game.name}}</p></div>
+          >
+            <p>{{block.name}}</p>
+            <p>{{block.game.name}}</p>
+          </div>
         </template>
       </div>
     </div>

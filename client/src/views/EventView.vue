@@ -7,20 +7,22 @@
     </div>
     <StreamViewer
       id="viewer"
+      class="viewerContainer"
       v-if="streamSelected"
       v-on:clear="clear"
       v-bind:channel="currentStream"
       :class="{sViewWindowIn:!clearing, sViewWindowOut:clearing}"
     />
-
-    <Schedule
-      if="schedule"
-      class="scheduleWindow"
-      v-if="eventExists"
-      v-bind:event="event"
-      v-on:open="openStream"
-      :class="[streamSelected? 'shiftScheduleDown' : 'shiftScheduleUp']"
-    />
+    <div class="wrapper">
+      <Schedule
+        if="schedule"
+        class="scheduleContainer"
+        v-if="eventExists"
+        v-bind:event="event"
+        v-on:open="openStream"
+        :class="{'shiftScheduleDown': (!clearing  && streamSelected), 'shiftScheduleUp': clearing}"
+      />
+    </div>
   </div>
 </template>
 
@@ -46,8 +48,8 @@ export default {
   },
   async created() {
     var id;
-    if(this.$route.params.id) id = this.$route.params.id;
-    else id='5f5a242678519e1928bda957';
+    if (this.$route.params.id) id = this.$route.params.id;
+    else id = "5f5a242678519e1928bda957";
     await axios.get(`/api/schedule/find/${id}`).then(res => {
       this.event = res.data;
       this.eventExists = true;
@@ -88,6 +90,13 @@ export default {
   animation: sViewOut 0.3s ease-in-out 0s forwards;
   position: absolute;
 }
+.scheduleContainer {
+  padding-top: 20px;
+  position: relative;
+}
+.viewerContainer {
+  position: relative;
+}
 .scheduleWindow {
   position: absolute;
 }
@@ -95,22 +104,22 @@ export default {
   animation: shiftDown 0.5s ease-in-out 0s forwards;
 }
 .shiftScheduleUp {
-  animation: shiftUp 0.3s ease-in-out 0s forwards;
+  animation: shiftUp 0.5s ease-in-out 0s;
 }
 @keyframes sViewIn {
   0% {
     opacity: 0;
-    left: -100vw;
+    left: -100%;
   }
   100% {
     opacity: 1;
-    left: 14vw;
+    left: 0%;
   }
 }
 @keyframes sViewOut {
   0% {
     opacity: 1;
-    left: 14vw;
+    left: 0%;
   }
   100% {
     opacity: 0;
@@ -119,18 +128,18 @@ export default {
 }
 @keyframes shiftDown {
   0% {
-    transform: translateY(0);
+    bottom: 660px;
   }
   100% {
-    transform: translateY(45vw);
+    bottom: 0px;
   }
 }
 @keyframes shiftUp {
   0% {
-    transform: translateY(45vw);
+    bottom: 0px;
   }
   100% {
-    transform: translateY(0);
+    bottom: 660px;
   }
 }
 </style>

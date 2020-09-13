@@ -5,9 +5,7 @@
       <div
         v-for="event in events"
         :key="event._id"
-        class="card bg-dark"
-        style="width:20vw; min-width:300px"
-      >
+        class="card bg-dark">
         <div class="card-body">
           <h5 class="card-title">{{event.name}}</h5>
           <p class="card-text">{{event.description}}</p>

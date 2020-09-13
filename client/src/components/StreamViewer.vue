@@ -4,15 +4,19 @@
       <h1>{{channel.name}}</h1>
     </div>
     <button class="btn btn-dark myButton bg-danger" v-on:click="$emit('clear')">X</button>
-    <div class="playerCont">
-      <iframe
-        width="100%"
-        height="100%"
-        :src="`https://player.twitch.tv/?channel=`+ `${channel.link}&parent=option-select.herokuapp.com`"
-        frameborder="0"
-        scrolling="no"
-        allowfullscreen="true"
-      ></iframe>
+    <div class="wrapper">
+      <div class="widescreen">
+        <div class="playerCont">
+          <iframe
+            width="100%"
+            height="100%"
+            :src="`https://player.twitch.tv/?channel=`+ `${channel.link}&parent=option-select.herokuapp.com`"
+            frameborder="0"
+            scrolling="no"
+            allowfullscreen="true"
+          ></iframe>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -25,12 +29,23 @@ export default {
 </script>
 
 <style scoped>
+.wrapper {
+  position: relative;
+  width: 100%;
+}
 .playerCont {
-  width: 72vw;
-  height: 40.5vw;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.widescreen {
+  padding-bottom: 56.25%; /* 9/16 = 0.5625 */
 }
 .viewerWindow {
   border: 3px #8458b3 solid;
+  width: 100%;
   border-radius: 20px;
   overflow: hidden;
   background: #111;
@@ -40,6 +55,6 @@ export default {
   top: 3px;
   right: 3px;
   border-radius: 20%;
-  opacity: .7;
+  opacity: 0.7;
 }
 </style>
