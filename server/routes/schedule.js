@@ -9,17 +9,8 @@ router.route("/all").get((req, res) => {
   });
 });
 
-router.route("/all/full").get((req, res) => {
-  Schedule.find()
-    .populate("channels.blocks.game")
-    .exec((err, scheds) => {
-        if (err) res.status(400).send(err);
-        else res.status(200).json(scheds);
-    });
-});
-
 router.route("/find/:id").get((req,res) => {
-  Schedule.findById(req.params.id).populate("channels.blocks.game")
+  Schedule.findById(req.params.id)
   .exec((err, sched) => {
     if (err) res.status(400).send(err);
     else res.status(200).json(sched);

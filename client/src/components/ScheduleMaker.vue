@@ -1,58 +1,76 @@
 <template>
   <div>
-    <div class="btn-group" role="group" style="margin-bottom:10px">
-      <div
-        v-for="n in eventLengthDays"
-        v-bind:key="`day${n}`"
-        class="btn-group"
-        role="group"
-        style="margin-bottom:10px"
-      >
-        <button class="btn btn-dark" v-on:click="changeDay(n)">Day {{n}}</button>
+    <div class="dropdown">
+      <button
+        class="btn btn-dark dropdown-toggle"
+        type="button"
+        id="dropdownMenuButton"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >Day {{currentDay}}</button>
+      <div class="dropdown-menu bg-dark" aria-labelledby="dropdownMenuButton">
+        <template
+          v-for="n in eventLengthDays"
+          class="btn-group"
+          role="group"
+          style="margin-bottom:10px"
+        >
+          <button
+            class="dropdown-item"
+            style="color:#EEE"
+            type="button"
+            v-on:click="changeDay(n)"
+            v-bind:key="`day${n}`"
+          >Day {{n}}</button>
+        </template>
       </div>
     </div>
-    <div class="mainGridContainer">
-      <div style="grid-row:1;grid-column:1/3;border:none;"></div>
-      <div
-        class="channelLabel"
-        v-for="(channel) in event.channels"
-        :key="channel._id"
-        v-on:click="$emit('open',channel)"
-      >{{ `${channel.name}`}}</div>
-      <div
-        class="contentWindow"
-        id="scheduleContent"
-        :style="`grid-row: 1/${event.channels.length+3};grid-template-columns: repeat(${timelineSize}, minmax(20px,auto))`"
-      >
+    <div>
+      <button class="btn btn-success add-channel" v-on:click="$emit('new-channel')">+ Add Channel</button>
+      <div class="mainGridContainer">
+        <div style="grid-row:1;grid-column:1/3;border:none;"></div>
         <div
-          class="spacerBlock"
-          v-for="i in event.channels.length"
-          :key="`space${i}`"
-          :style="`grid-row:${i+1}/${i+2}; grid-column:1/-1`"
-        ></div>
-        <template v-for="n in timelineSize">
-          <div v-if="n%4==1" :key="`timeLabel${n}`" :style="timeLabelStyle(n)">{{ returnTime(n) }}</div>
-        </template>
-        <div v-for="n in timelineSize" :key="`timelineGrid${n}`" :style="timelineStyle(n)"></div>
-        <div :style="`grid-row:1; grid-column:1/-1; border-bottom: solid thick #666; `" />
-        <template v-for="(channel, i) in event.channels">
+          class="channelLabel"
+          v-for="(channel, i) in event.channels"
+          :key="channel._id"
+          v-on:click="$emit('edit-channel',i)"
+        >{{ `${channel.name}`}}</div>
+        <div
+          class="contentWindow"
+          id="scheduleContent"
+          :style="`grid-row: 1/${event.channels.length+3};grid-template-columns: repeat(${timelineSize}, minmax(20px,auto))`"
+        >
           <div
-            v-for="(block) in channel.blocks.filter(block => {
+            class="spacerBlock"
+            v-for="i in event.channels.length"
+            :key="`space${i}`"
+            :style="`grid-row:${i+1}/${i+2}; grid-column:1/-1`"
+          ></div>
+          <template v-for="n in timelineSize">
+            <div v-if="n%4==1" :key="`timeLabel${n}`" :style="timeLabelStyle(n)">{{ returnTime(n) }}</div>
+          </template>
+          <div v-for="n in timelineSize" :key="`timelineGrid${n}`" :style="timelineStyle(n)"></div>
+          <div :style="`grid-row:1; grid-column:1/-1; border-bottom: solid thick #666; `" />
+          <template v-for="(channel, i) in event.channels">
+            <div
+              v-for="(block, j) in channel.blocks.filter(block => {
                 let start = new Date(block.startTime);
               if(start > addDays(startDate, currentDay-1) && start < addDays(startDate, currentDay) )
                 return true;
                 else return false;
           })"
-            :key="block._id"
-            :style="blockParams(i,block)"
-            v-on:click="$emit('edit-block',block)"
-            :ref="'block'"
-            class="timeBlock"
-          >
-            <p>{{block.name}}</p>
-            <p>{{block.game.name}}</p>
-          </div>
-        </template>
+              :key="block._id"
+              :style="blockParams(i,block)"
+              v-on:click="$emit('edit-block',j,i)"
+              :ref="'block'"
+              class="timeBlock"
+            >
+            <p style="font-weight:bold">{{block.name}}</p>
+            <p>{{block.game}}</p>
+            </div>
+          </template>
+        </div>
       </div>
     </div>
   </div>
@@ -185,6 +203,8 @@ export default {
   height: 100px;
   margin: 2px 0px 2px 2px;
   background-color: #222;
+  max-width: 120px;
+  word-wrap: break-word;
 }
 .channelLabel:hover {
   background-color: #282828;
@@ -226,6 +246,10 @@ export default {
   color: black;
   font-size: 100%;
   overflow: hidden;
+  padding-top: .5em;
+}
+.timeBlock > p {
+  margin: 0;
 }
 .timeBlock:nth-child(3n + 1) {
   background-color: #a0d2eb;
@@ -248,5 +272,15 @@ export default {
 
 .timeBlock:active {
   box-shadow: inset 3px 3px 3px 0px rgba(0, 0, 0, 0.75);
+}
+
+.add-channel {
+  position: absolute;
+  left: 1.3em;
+  top: 2em;
+  border-radius: 3em;
+}
+.dropdown-item:hover {
+  background-color: #222;
 }
 </style>

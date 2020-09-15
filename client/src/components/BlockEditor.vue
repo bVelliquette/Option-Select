@@ -1,0 +1,162 @@
+<template>
+  <div class="form-container">
+    <form action>
+      <div class="form-group">
+        <label for="block-title">Block Title</label>
+        <input
+          type="text"
+          v-model="tempBlock.name"
+          class="form-control"
+          id="block-title"
+          placeholder="Enter block title"
+        />
+      </div>
+      <div class="form-group">
+        <label for="block-game">Game</label>
+        <input
+          type="text"
+          v-model="tempBlock.game"
+          class="form-control"
+          id="block-game"
+          placeholder="Enter game name"
+        />
+      </div>
+    </form>
+    <div class="row">
+      <div class="col">
+        <label style="display:block" for="block-date">Date</label>
+        <vc-date-picker
+          :min-date="start"
+          :max-date="end"
+          mode="single"
+          color="purple"
+          is-dark
+          :input-props="{style:'width:auto'}"
+          v-model="startDate"
+          id="block-date"
+        />
+      </div>
+      <div class="col">
+        <label style="display:block" for="block-date">End Date</label>
+        <vc-date-picker
+          :min-date="start"
+          :max-date="end"
+          mode="single"
+          color="purple"
+          is-dark
+          :input-props="{style:'width:auto'}"
+          v-model="endDate"
+          id="block-date"
+        />
+      </div>
+    </div>
+    <div class="row" style="margin-top:.5em">
+      <div class="col">
+        <label style="display:block" for="block-time-start">Start Time</label>
+        <VueTimepicker
+          v-model="startTime"
+          format="hh:mm A"
+          :minute-interval="15"
+          id="block-time-start"
+        />
+      </div>
+      <div class="col">
+        <label style="display:block" for="block-time-end">End Time</label>
+        <VueTimepicker
+          v-model="endTime"
+          format="hh:mm A"
+          id="block-time-end"
+          :minute-interval="15"
+        />
+      </div>
+    </div>
+    <br />
+    <button
+      class="btn btn-dark"
+      style="margin-top:1em;margin-bottom:1em"
+      v-on:click="update"
+    >{{action}}</button>
+    <div
+      v-if="incomplete"
+      class="alert alert-danger"
+      role="alert"
+    >Some fields have been left incomplete</div>
+    <div
+      v-if="invalid"
+      class="alert alert-danger"
+      role="alert"
+    >The start of the block must be before the end of the block.</div>
+  </div>
+</template>
+
+<script>
+import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
+export default {
+  name: "BlockEditor",
+  props: ["action", "block", "start", "end"],
+  components: {
+    VueTimepicker
+  },
+  data() {
+    return {
+      incomplete: false,
+      invalid: false,
+      startDate: "",
+      endDate: "",
+      startTime: {},
+      endTime: {},
+      tempBlock: {
+        name: "",
+        startTime: "2020-10-01T12:00:00.000Z",
+        endTime: "2020-10-01T14:00:00.000Z",
+        game: ""
+      }
+    };
+  },
+  created() {
+    if (this.action == "Edit") this.tempBlock = { ...this.block };
+  },
+  methods: {
+    update() {
+      if (
+        this.startDate &&
+        this.endDate &&
+        this.startTime &&
+        this.endTime &&
+        this.tempBlock.name &&
+        this.tempBlock.game
+      ) {
+        var tempStart = new Date(this.startDate);
+        var tempEnd = new Date(this.endDate);
+        tempStart.setHours(this.getMilHour(this.startTime), this.startTime.mm); //
+        tempEnd.setHours(this.getMilHour(this.endTime), this.endTime.mm); //
+
+        if (tempStart >= tempEnd) {
+          this.incomplete = false;
+          this.invalid = true;
+        } else {
+          this.tempBlock.startTime = tempStart;
+          this.tempBlock.endTime = tempEnd;
+          console.log(this.tempBlock);
+          this.$emit("update", this.tempBlock);
+        }
+      } else {
+        this.invalid = false;
+        this.incomplete = true;
+      }
+    },
+    getMilHour(timeObj) {
+      if (timeObj.A == "AM") {
+        if (timeObj.hh == "12") return 0;
+        else return parseInt(timeObj.hh);
+      } else {
+        if (timeObj.hh == "12") return 12;
+        else return parseInt(timeObj.hh) + 12;
+      }
+    }
+  }
+};
+</script>
+
+<style scoped>
+</style>

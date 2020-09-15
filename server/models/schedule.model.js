@@ -18,10 +18,7 @@ var schedSchema = new Schema({
           description: String,
           startTime: { type: Date, required: true },
           endTime: { type: Date, required: true },
-          game: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Game",
-          },
+          game: { type: String, required: true },
         },
       ],
     },

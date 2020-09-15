@@ -1,14 +1,29 @@
 <template>
   <div>
-    <div class="btn-group" role="group" style="margin-bottom:10px">
-      <div
-        v-for="n in eventLengthDays"
-        v-bind:key="`day${n}`"
-        class="btn-group"
-        role="group"
-        style="margin-bottom:10px"
-      >
-        <button class="btn btn-dark" v-on:click="changeDay(n)">Day {{n}}</button>
+    <div class="dropdown">
+      <button
+        class="btn btn-dark dropdown-toggle"
+        type="button"
+        id="dropdownMenuButton"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >Day {{currentDay}}</button>
+      <div class="dropdown-menu bg-dark" aria-labelledby="dropdownMenuButton">
+        <template
+          v-for="n in eventLengthDays"
+          class="btn-group"
+          role="group"
+          style="margin-bottom:10px"
+        >
+          <button
+            class="dropdown-item"
+            style="color:#EEE"
+            type="button"
+            v-on:click="changeDay(n)"
+            v-bind:key="`day${n}`"
+          >Day {{n}}</button>
+        </template>
       </div>
     </div>
     <div class="mainGridContainer">
@@ -49,8 +64,8 @@
             :ref="'block'"
             class="timeBlock"
           >
-            <p>{{block.name}}</p>
-            <p>{{block.game.name}}</p>
+            <p style="font-weight:bold">{{block.name}}</p>
+            <p>{{block.game}}</p>
           </div>
         </template>
       </div>
@@ -185,6 +200,8 @@ export default {
   height: 100px;
   margin: 2px 0px 2px 2px;
   background-color: #222;
+  max-width: 120px;
+  word-wrap: break-word;
 }
 .channelLabel:hover {
   background-color: #282828;
@@ -226,6 +243,10 @@ export default {
   color: black;
   font-size: 100%;
   overflow: hidden;
+  padding-top: .5em;
+}
+.timeBlock > p {
+  margin: 0;
 }
 .timeBlock:nth-child(3n + 1) {
   background-color: #a0d2eb;
@@ -248,5 +269,9 @@ export default {
 
 .timeBlock:active {
   box-shadow: inset 3px 3px 3px 0px rgba(0, 0, 0, 0.75);
+}
+
+.dropdown-item:hover {
+  background-color:#222
 }
 </style>
