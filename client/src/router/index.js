@@ -7,6 +7,7 @@ import News from "../views/News.vue";
 import Events from "../views/EventView.vue";
 import Dev from "../views/Dev.vue";
 import EventBrowser from "../views/EventBrowser.vue";
+import AddEvent from "../views/AddEvent.vue";
 
 
 Vue.use(VueRouter);
@@ -41,6 +42,11 @@ const routes = [
     path: "/dev",
     name: "Dev",
     component: Dev
+  },
+  {
+    path: "/AddEvent",
+    name: "AddEvent",
+    component: AddEvent
   },
   {
     path:"*",

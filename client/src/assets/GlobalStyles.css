@@ -10,3 +10,8 @@
   color: #e5eaf5 !important;
 }
 
+.scrollable-menu {
+  height: auto;
+  max-height: 200px;
+  overflow-x: hidden;
+}

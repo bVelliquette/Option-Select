@@ -71,11 +71,13 @@
       </div>
     </div>
     <br />
+    <button class="btn btn-dark" style="margin:1em" v-on:click="update">{{action}}</button>
     <button
-      class="btn btn-dark"
-      style="margin-top:1em;margin-bottom:1em"
-      v-on:click="update"
-    >{{action}}</button>
+      v-if="action=='Edit'"
+      class="btn btn-danger"
+      style="margin:1em"
+      v-on:click="$emit('delete-block')"
+    >{{`Delete Schedule Block`}}</button>
     <div
       v-if="incomplete"
       class="alert alert-danger"
@@ -93,7 +95,7 @@
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
 export default {
   name: "BlockEditor",
-  props: ["action", "block", "start", "end"],
+  props: ["action", "block", "start", "end", "timezoneOffset", "currentDay"],
   components: {
     VueTimepicker
   },
@@ -114,7 +116,49 @@ export default {
     };
   },
   created() {
-    if (this.action == "Edit") this.tempBlock = { ...this.block };
+    if (this.action == "Edit") {
+      this.tempBlock = { ...this.block };
+      this.startDate = new Date(
+        this.block.startTime.getFullYear(),
+        this.block.startTime.getMonth(),
+        this.block.startTime.getDate()
+      );
+      this.endDate = new Date(
+        this.block.endTime.getFullYear(),
+        this.block.endTime.getMonth(),
+        this.block.endTime.getDate()
+      );
+      var timezoneAdjustedStart = new Date(
+        this.block.startTime.getTime() +
+          this.block.startTime.getTimezoneOffset() * 60 * 1000 -
+          this.timezoneOffset * 60 * 1000
+      );
+      var timezoneAdjustedEnd = new Date(
+        this.block.endTime.getTime() +
+          this.block.endTime.getTimezoneOffset() * 60 * 1000 -
+          this.timezoneOffset * 60 * 1000
+      );
+      console.log(this.timezoneOffset);
+      this.dateTimeToTimeObj(timezoneAdjustedStart, this.startTime);
+      this.dateTimeToTimeObj(timezoneAdjustedEnd, this.endTime);
+    }
+    if (this.action == "Create") {
+      this.endDate = this.addDays(
+        new Date(
+          this.start.getUTCFullYear(),
+          this.start.getUTCMonth(),
+          this.start.getUTCDate()
+        ), this.currentDay
+      );
+      this.startDate = this.addDays(
+        new Date(
+          this.start.getUTCFullYear(),
+          this.start.getUTCMonth(),
+          this.start.getUTCDate()
+        ),
+        this.currentDay
+      );
+    }
   },
   methods: {
     update() {
@@ -131,19 +175,34 @@ export default {
         tempStart.setHours(this.getMilHour(this.startTime), this.startTime.mm); //
         tempEnd.setHours(this.getMilHour(this.endTime), this.endTime.mm); //
 
+        tempStart.setTime(
+          tempStart.getTime() -
+            tempStart.getTimezoneOffset() * 60 * 1000 +
+            this.timezoneOffset * 60 * 1000
+        );
+        tempEnd.setTime(
+          tempEnd.getTime() -
+            tempEnd.getTimezoneOffset() * 60 * 1000 +
+            this.timezoneOffset * 60 * 1000
+        );
+
         if (tempStart >= tempEnd) {
           this.incomplete = false;
           this.invalid = true;
         } else {
           this.tempBlock.startTime = tempStart;
           this.tempBlock.endTime = tempEnd;
-          console.log(this.tempBlock);
           this.$emit("update", this.tempBlock);
         }
       } else {
         this.invalid = false;
         this.incomplete = true;
       }
+    },
+    addDays(date, days) {
+      var result = new Date(date);
+      result.setDate(result.getDate() + days);
+      return result;
     },
     getMilHour(timeObj) {
       if (timeObj.A == "AM") {
@@ -153,6 +212,30 @@ export default {
         if (timeObj.hh == "12") return 12;
         else return parseInt(timeObj.hh) + 12;
       }
+    },
+    dateTimeToTimeObj(date, timeObj) {
+      if (date.getHours() > 12) {
+        timeObj.hh = (date.getHours() - 12).toString().padStart(2, "0");
+        timeObj.A = "PM";
+      } else if (date.getHours() == 12) {
+        timeObj.hh = "12";
+        timeObj.A = "PM";
+      } else if (date.getHours() == 0) {
+        timeObj.hh = "12";
+        timeObj.A = "AM";
+      } else if (date.getHours() < 12) {
+        timeObj.hh = date
+          .getHours()
+          .toString()
+          .padStart(2, "0");
+        timeObj.A = "AM";
+      }
+      timeObj.mm =
+        "" +
+        date
+          .getMinutes()
+          .toString()
+          .padStart(2, "0");
     }
   }
 };

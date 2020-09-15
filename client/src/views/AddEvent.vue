@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h1>Event Schedule Creation Demo</h1>
+    <h1>Add Event</h1>
+    <button class="btn btn-success" v-on:click="submitEvent">Submit Event to DB</button>
     <div class="container">
       <div class="row">
         <div class="form-container col-12 col-lg-6">
@@ -157,9 +158,10 @@ import ChannelEditor from "../components/ChannelEditor";
 import BlockEditor from "../components/BlockEditor";
 import timezones from "../assets/timezones";
 import VueTimepicker from "vue2-timepicker/src/vue-timepicker.vue";
+import axios from "axios";
 
 export default {
-  name: "ScheduleMakerDemo",
+  name: "AddEvent",
   components: {
     ScheduleMaker,
     ChannelEditor,
@@ -193,7 +195,7 @@ export default {
             blocks: [],
             name: "Channel 1",
             link: "",
-            website: ""
+            website: "Twitch"
           }
         ]
       }
@@ -206,6 +208,30 @@ export default {
     this.range.end = new Date();
   },
   methods: {
+    submitEvent() {
+      var tempEvent = {...this.event};
+      tempEvent.channels.forEach(channel => {
+        channel.blocks.forEach(block => {
+          if (block.endTime instanceof Date)
+            block.endTime = block.endTime.toISOString();
+          if (block.startTime instanceof Date)
+            block.startTime = block.startTime.toISOString();
+        });
+      });
+      if (tempEvent.startDate instanceof Date)
+        tempEvent.startDate = tempEvent.startDate.toISOString();
+      if (tempEvent.endDate instanceof Date)
+        tempEvent.endDate = tempEvent.endDate.toISOString();
+        console.log(tempEvent);
+      axios
+        .post("/api/schedule/add", this.event)
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     getMilHour(timeObj) {
       if (timeObj.A == "AM") {
         if (timeObj.hh == "12") return 0;

@@ -9,7 +9,7 @@
         aria-haspopup="true"
         aria-expanded="false"
       >Day {{currentDay}}</button>
-      <div class="dropdown-menu bg-dark" aria-labelledby="dropdownMenuButton">
+      <div class="dropdown-menu scrollable-menu bg-dark" aria-labelledby="dropdownMenuButton">
         <template
           v-for="n in eventLengthDays"
           class="btn-group"

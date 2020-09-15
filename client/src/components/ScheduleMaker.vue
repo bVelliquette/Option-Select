@@ -9,7 +9,7 @@
         aria-haspopup="true"
         aria-expanded="false"
       >Day {{currentDay}}</button>
-      <div class="dropdown-menu bg-dark" aria-labelledby="dropdownMenuButton">
+      <div class="dropdown-menu scrollable-menu bg-dark" aria-labelledby="dropdownMenuButton">
         <template
           v-for="n in eventLengthDays"
           class="btn-group"
@@ -20,7 +20,7 @@
             class="dropdown-item"
             style="color:#EEE"
             type="button"
-            v-on:click="changeDay(n)"
+            v-on:click="$emit('change-day', n)"
             v-bind:key="`day${n}`"
           >Day {{n}}</button>
         </template>
@@ -56,7 +56,7 @@
             <div
               v-for="(block, j) in channel.blocks.filter(block => {
                 let start = new Date(block.startTime);
-              if(start > addDays(startDate, currentDay-1) && start < addDays(startDate, currentDay) )
+              if(start >= addDays(event.startDate, currentDay-1) && start < addDays(event.startDate, currentDay) )
                 return true;
                 else return false;
           })"
@@ -79,12 +79,10 @@
 <script>
 export default {
   name: "ScheduleMaker",
-  props: ["event"],
+  props: ["event", "currentDay"],
   data() {
     return {
       timelineSize: 96,
-      currentDay: 1,
-      startDate: this.event.startDate,
       eventLengthDays: ""
     };
   },
@@ -104,37 +102,29 @@ export default {
   },
   methods: {
     blockParams(channelIndex, block) {
+
+      /*
+       *  To figure out grid location, use the block's start time's distance
+       *  from the event's cutoff time (i.e. startDate.getHours())
+       *  
+       *  Also, remember to rework the block.filter function to more accurately include
+       *  blocks in their correct days. (Maybe works already?)
+       */
+
+
       let startTime = new Date(block.startTime);
       let endTime = new Date(block.endTime);
       let start =
-        startTime.getUTCHours() * 4 +
-        Math.floor(startTime.getUTCMinutes() / 15) +
-        1 -
-        40; // +1 because CSS Grids start at 1 and -40 to shift left 10 hours;
+        (startTime.getHours()-this.event.startDate.getHours()) * 4 +
+        Math.floor(startTime.getMinutes() / 15) + 1; //+1 because CSS grid starts at one
       let end =
-        endTime.getUTCHours() * 4 +
-        Math.floor(endTime.getUTCMinutes() / 15) +
-        1 -
-        40; // +1 because CSS Grids start at 1 and -40 to shift left 10 hours;
-
-      //Shifting left 10 hours allows the window to begin at 6AM EDT
+        (endTime.getHours()-this.event.startDate.getHours()) * 4 +
+        Math.floor(endTime.getMinutes() / 15) + 1;   //+1 because CSS grid starts at one
 
       return {
         "grid-row": `${channelIndex + 2}`,
         "grid-column": `${start}/${end}`
       };
-    },
-    async changeDay(newDay) {
-      this.currentDay = newDay;
-      await new Promise(r => setTimeout(r, 100));
-      if (this.$refs.block) {
-        var lowest = this.$refs.block[0].offsetLeft;
-        this.$refs.block.forEach(e => {
-          lowest = e.offsetLeft < lowest ? e.offsetLeft : lowest;
-        });
-        var elmnt = document.getElementById("scheduleContent");
-        elmnt.scrollTo({ left: lowest - 150, behavior: "smooth" });
-      }
     },
     timeLabelStyle(n) {
       var style = {
@@ -160,9 +150,9 @@ export default {
     },
     returnTime(n) {
       if (n % 4 != 1) return;
-      n += 10 * 4; //Shift the time labels so that the Window starts at 6AM EDT
-      let time = this.addDays(this.startDate, this.currentDay - 1);
-      time.setUTCHours(Math.floor(n / 4));
+      n += this.event.startDate.getHours() * 4; //Shift the time labels so that the Window starts at 6AM EDT
+      let time = this.addDays(this.event.startDate, this.currentDay - 1);
+      time.setHours(Math.floor(n / 4));
       let timeString = "";
       if (time.getHours() % 12 == 0) timeString = "12:00";
       else timeString = `${time.getHours() % 12}:00`;
