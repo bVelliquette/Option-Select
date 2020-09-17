@@ -2,8 +2,6 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import NotFound from "../views/NotFound.vue";
-import About from "../views/About.vue";
-import News from "../views/News.vue";
 import Events from "../views/EventView.vue";
 import ScheduleMakerDemo from "../views/ScheduleMakerDemo.vue";
 import EventBrowser from "../views/EventBrowser.vue";
@@ -19,11 +17,6 @@ const routes = [
     component: Home
   },
   {
-    path: "/about",
-    name: "About",
-    component: About
-  },
-  {
     path: "/events",
     name: "EventBrowser",
     component: EventBrowser
@@ -32,11 +25,6 @@ const routes = [
     path: "/events/:id",
     name: "EventsWithParam",
     component: Events
-  },
-  {
-    path: "/news",
-    name: "News",
-    component: News
   },
   {
     path: "/createEvent",

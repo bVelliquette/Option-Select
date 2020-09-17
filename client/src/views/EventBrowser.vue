@@ -1,5 +1,5 @@
 <template>
-  <div style="position:relative">
+  <div style="position:relative;padding:1em">
     <h1>Upcoming Events</h1>
     <router-link class="btn btn-primary createButton" :to="'/createEvent'">Schedule Maker Tool Demo</router-link>
     <div class="card-columns">

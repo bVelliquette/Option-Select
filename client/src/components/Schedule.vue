@@ -189,7 +189,7 @@ export default {
   margin: 1em;
   display: grid;
   background-color: #080808;
-  grid-template-columns: 1fr 10fr;
+  grid-template-columns: 120px 1fr;
   grid-template-rows: 40px;
   grid-auto-rows: auto;
   border: 3px #8458b3 solid;
