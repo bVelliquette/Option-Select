@@ -7,45 +7,45 @@ import ScheduleMakerDemo from "../views/ScheduleMakerDemo.vue";
 import EventBrowser from "../views/EventBrowser.vue";
 import AddEvent from "../views/AddEvent.vue";
 
-
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
     name: "Home",
-    component: Home
+    component: Home,
   },
   {
     path: "/events",
     name: "EventBrowser",
-    component: EventBrowser
+    component: EventBrowser,
   },
   {
     path: "/events/:id",
     name: "EventsWithParam",
-    component: Events
+    component: Events,
   },
   {
     path: "/createEvent",
     name: "ScheduleMakerDemo",
-    component: ScheduleMakerDemo
+    component: ScheduleMakerDemo,
   },
   {
+    path: "*",
+    component: NotFound,
+  },
+];
+if (process.env.NODE_ENV !== "production") {
+  routes.push({
     path: "/AddEvent",
     name: "AddEvent",
-    component: AddEvent
-  },
-  {
-    path:"*",
-    component: NotFound
-  }
-];
-
+    component: AddEvent,
+  });
+}
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
-  routes
+  routes,
 });
 
 export default router;
