@@ -3,6 +3,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const scheduleRouter = require("./routes/schedule");
 const gameRouter = require("./routes/game");
+var history = require('connect-history-api-fallback');
 //const config = require("./config");
 
 
@@ -16,6 +17,7 @@ const app = express();
 //Middleware
 app.use(cors());
 app.use(express.json());
+app.use(history());
 
 app.use("/api/schedule", scheduleRouter);
 app.use("/api/game", gameRouter);
