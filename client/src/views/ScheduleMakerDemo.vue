@@ -103,6 +103,7 @@
             v-bind:action="action"
             v-bind:channel="event.channels[targetChannelIndex]"
             v-on:update="updateChannel"
+            v-on:clear="clear"
           />
           <div style="margin-top:2em; margin-bottom:1em">
             <button
@@ -126,17 +127,24 @@
         <div v-if="editingBlock" class="col-12 col-lg-6 editor-container">
           <BlockEditor
             v-bind:action="action"
-            v-bind:start="event.startDate"
-            v-bind:end="event.endDate"
+            v-bind:start="range.start"
+            v-bind:end="range.end"
             v-bind:timezoneOffset="selectedTimezone.offset"
             v-bind:block="event.channels[targetChannelIndex].blocks[targetBlockIndex]"
             v-on:update="updateBlock"
             v-on:delete-block="deleteBlock"
             v-bind:currentDay="currentDay"
+            v-on:clear="clear"
           />
         </div>
       </div>
     </div>
+    <div
+      v-if="currentDay > 1"
+      class="alert alert-danger"
+      role="alert"
+      style="width:fit-content;margin:auto;left:0;right:0"
+    >Currently unable to edit blocks outside of Day 1. Adding new blocks is unaffected by this issue.</div>
     <ScheduleMaker
       style="padding-top: 2em; position:relative"
       id="schedule"
@@ -193,7 +201,7 @@ export default {
             blocks: [],
             name: "Channel 1",
             link: "",
-            website: ""
+            website: "Twitch"
           }
         ]
       }
@@ -206,6 +214,12 @@ export default {
     this.range.end = new Date();
   },
   methods: {
+    clear() {
+      this.editingChannel = false;
+      this.editingBlock = false;
+      this.targetChannelIndex = null;
+      this.targetBlockIndex = null;
+    },
     getMilHour(timeObj) {
       if (timeObj.A == "AM") {
         if (timeObj.hh == "12") return 0;
@@ -228,20 +242,21 @@ export default {
       }
     },
     cuttoffUpdate() {
-      this.event.startDate.setHours(this.getMilHour(this.cuttoffTime));
-      this.event.endDate.setHours(this.getMilHour(this.cuttoffTime));
+      this.range.start.setHours(this.getMilHour(this.cuttoffTime));
+      this.range.end.setHours(this.getMilHour(this.cuttoffTime));
       var sDatetime = new Date(
-        this.event.startDate.getTime() -
-          this.event.startDate.getTimezoneOffset() * 60 * 1000 +
+        this.range.start.getTime() -
+          this.range.start.getTimezoneOffset() * 60 * 1000 +
           this.selectedTimezone.offset * 60 * 1000
       );
       var eDatetime = new Date(
-        this.event.endDate.getTime() -
-          this.event.endDate.getTimezoneOffset() * 60 * 1000 +
+        this.range.end.getTime() -
+          this.range.end.getTimezoneOffset() * 60 * 1000 +
           this.selectedTimezone.offset * 60 * 1000
       );
       this.event.startDate = sDatetime;
       this.event.endDate = eDatetime;
+      this.clear();
     },
     newDates() {
       this.event.startDate = this.range.start;
@@ -255,10 +270,12 @@ export default {
       this.targetBlockIndex = null;
       this.targetChannelIndex = null;
       await setTimeout(null, 100);
-      this.targetBlockIndex = i;
-      this.targetChannelIndex = j;
-      this.action = "Edit";
-      this.editingBlock = true;
+      if (this.currentDay == 1) {
+        this.targetBlockIndex = i;
+        this.targetChannelIndex = j;
+        this.action = "Edit";
+        this.editingBlock = true;
+      }
     },
     async newBlock() {
       this.editingChannel = false;

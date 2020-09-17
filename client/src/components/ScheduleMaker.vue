@@ -14,7 +14,6 @@
           v-for="n in eventLengthDays"
           class="btn-group"
           role="group"
-          style="margin-bottom:10px"
         >
           <button
             class="dropdown-item"
@@ -26,6 +25,7 @@
         </template>
       </div>
     </div>
+    <div class="text-muted" style="position:absolute;top:4.2em;margin:auto;left:0;right:0"> Times below are according to your local timezone</div>
     <div>
       <button class="btn btn-success add-channel" v-on:click="$emit('new-channel')">+ Add Channel</button>
       <div class="mainGridContainer">
@@ -101,25 +101,27 @@ export default {
     }
   },
   methods: {
-    blockParams(channelIndex, block) {
-
-      /*
-       *  To figure out grid location, use the block's start time's distance
-       *  from the event's cutoff time (i.e. startDate.getHours())
-       *  
-       *  Also, remember to rework the block.filter function to more accurately include
-       *  blocks in their correct days. (Maybe works already?)
-       */
-
-
+blockParams(channelIndex, block) {
       let startTime = new Date(block.startTime);
       let endTime = new Date(block.endTime);
       let start =
-        (startTime.getHours()-this.event.startDate.getHours()) * 4 +
-        Math.floor(startTime.getMinutes() / 15) + 1; //+1 because CSS grid starts at one
+        Math.floor(
+          (startTime.getTime() - this.event.startDate.getTime()) /
+            (1000 * 60 * 60)
+        ) *
+          4 +
+        Math.floor(startTime.getMinutes() / 15) -
+        (this.currentDay - 1) * 24 * 4 +
+        1; //+1 because CSS grid starts at one
       let end =
-        (endTime.getHours()-this.event.startDate.getHours()) * 4 +
-        Math.floor(endTime.getMinutes() / 15) + 1;   //+1 because CSS grid starts at one
+        Math.floor(
+          (endTime.getTime() - this.event.startDate.getTime()) /
+            (1000 * 60 * 60)
+        ) *
+          4 +
+        Math.floor(endTime.getMinutes() / 15) -
+        (this.currentDay - 1) * 24 * 4 +
+        1; //+1 because CSS grid starts at one
 
       return {
         "grid-row": `${channelIndex + 2}`,
@@ -150,7 +152,7 @@ export default {
     },
     returnTime(n) {
       if (n % 4 != 1) return;
-      n += this.event.startDate.getHours() * 4; //Shift the time labels so that the Window starts at 6AM EDT
+      n += this.event.startDate.getHours() * 4;
       let time = this.addDays(this.event.startDate, this.currentDay - 1);
       time.setHours(Math.floor(n / 4));
       let timeString = "";
@@ -173,7 +175,7 @@ export default {
 
 <style scoped>
 .mainGridContainer {
-  margin: 1em;
+  margin: 1.2em;
   display: grid;
   background-color: #080808;
   grid-template-columns: 1fr 10fr;

@@ -104,6 +104,7 @@
             v-bind:action="action"
             v-bind:channel="event.channels[targetChannelIndex]"
             v-on:update="updateChannel"
+            v-on:clear="clear"
           />
           <div style="margin-top:2em; margin-bottom:1em">
             <button
@@ -127,13 +128,14 @@
         <div v-if="editingBlock" class="col-12 col-lg-6 editor-container">
           <BlockEditor
             v-bind:action="action"
-            v-bind:start="event.startDate"
-            v-bind:end="event.endDate"
+            v-bind:start="range.start"
+            v-bind:end="range.end"
             v-bind:timezoneOffset="selectedTimezone.offset"
             v-bind:block="event.channels[targetChannelIndex].blocks[targetBlockIndex]"
             v-on:update="updateBlock"
             v-on:delete-block="deleteBlock"
             v-bind:currentDay="currentDay"
+            v-on:clear="clear"
           />
         </div>
       </div>
@@ -208,6 +210,12 @@ export default {
     this.range.end = new Date();
   },
   methods: {
+        clear() {
+      this.editingChannel = false;
+      this.editingBlock = false;
+      this.targetChannelIndex = null;
+      this.targetBlockIndex = null;
+    },
     submitEvent() {
       var tempEvent = {...this.event};
       tempEvent.channels.forEach(channel => {
@@ -254,20 +262,21 @@ export default {
       }
     },
     cuttoffUpdate() {
-      this.event.startDate.setHours(this.getMilHour(this.cuttoffTime));
-      this.event.endDate.setHours(this.getMilHour(this.cuttoffTime));
+      this.range.start.setHours(this.getMilHour(this.cuttoffTime));
+      this.range.end.setHours(this.getMilHour(this.cuttoffTime));
       var sDatetime = new Date(
-        this.event.startDate.getTime() -
-          this.event.startDate.getTimezoneOffset() * 60 * 1000 +
+        this.range.start.getTime() -
+          this.range.start.getTimezoneOffset() * 60 * 1000 +
           this.selectedTimezone.offset * 60 * 1000
       );
       var eDatetime = new Date(
-        this.event.endDate.getTime() -
-          this.event.endDate.getTimezoneOffset() * 60 * 1000 +
+        this.range.end.getTime() -
+          this.range.end.getTimezoneOffset() * 60 * 1000 +
           this.selectedTimezone.offset * 60 * 1000
       );
       this.event.startDate = sDatetime;
       this.event.endDate = eDatetime;
+      this.clear();
     },
     newDates() {
       this.event.startDate = this.range.start;

@@ -1,5 +1,6 @@
 <template>
   <div class="form-container">
+    <button class="btn btn-dark myButton bg-danger" v-on:click="$emit('clear')">X</button>
     <form action>
       <div class="form-group">
         <label for="block-title">Block Title</label>
@@ -71,7 +72,7 @@
       </div>
     </div>
     <br />
-    <button class="btn btn-dark" style="margin:1em" v-on:click="update">{{action}}</button>
+    <button class="btn btn-dark" style="margin:1em" v-on:click="update">{{actionLabel()}}</button>
     <button
       v-if="action=='Edit'"
       class="btn btn-danger"
@@ -138,29 +139,33 @@ export default {
           this.block.endTime.getTimezoneOffset() * 60 * 1000 -
           this.timezoneOffset * 60 * 1000
       );
-      console.log(this.timezoneOffset);
       this.dateTimeToTimeObj(timezoneAdjustedStart, this.startTime);
       this.dateTimeToTimeObj(timezoneAdjustedEnd, this.endTime);
     }
     if (this.action == "Create") {
       this.endDate = this.addDays(
         new Date(
-          this.start.getUTCFullYear(),
-          this.start.getUTCMonth(),
-          this.start.getUTCDate()
-        ), this.currentDay
+          this.start.getFullYear(),
+          this.start.getMonth(),
+          this.start.getDate()
+        ),
+        this.currentDay - 1
       );
       this.startDate = this.addDays(
         new Date(
-          this.start.getUTCFullYear(),
-          this.start.getUTCMonth(),
-          this.start.getUTCDate()
+          this.start.getFullYear(),
+          this.start.getMonth(),
+          this.start.getDate()
         ),
-        this.currentDay
+        this.currentDay - 1
       );
     }
   },
   methods: {
+    actionLabel() {
+      if (this.action == "Create") return "Create";
+      else return "Apply changes";
+    },
     update() {
       if (
         this.startDate &&
@@ -242,4 +247,15 @@ export default {
 </script>
 
 <style scoped>
+.myButton {
+  position: absolute;
+  top: .2em;
+  right: 1em;
+  height: 1.7em;
+  width: 1.7em;
+  padding: .1em;
+  border-radius: 20%;
+  opacity: 0.7;
+  overflow: hidden;
+}
 </style>

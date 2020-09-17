@@ -3,7 +3,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const scheduleRouter = require("./routes/schedule");
 const gameRouter = require("./routes/game");
-const config = require("./config");
+//const config = require("./config");
 
 
 mongoose.connect(process.env.URI || config.uri, {

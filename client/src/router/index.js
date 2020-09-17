@@ -5,7 +5,7 @@ import NotFound from "../views/NotFound.vue";
 import About from "../views/About.vue";
 import News from "../views/News.vue";
 import Events from "../views/EventView.vue";
-import Dev from "../views/Dev.vue";
+import ScheduleMakerDemo from "../views/ScheduleMakerDemo.vue";
 import EventBrowser from "../views/EventBrowser.vue";
 import AddEvent from "../views/AddEvent.vue";
 
@@ -39,9 +39,9 @@ const routes = [
     component: News
   },
   {
-    path: "/dev",
-    name: "Dev",
-    component: Dev
+    path: "/createEvent",
+    name: "ScheduleMakerDemo",
+    component: ScheduleMakerDemo
   },
   {
     path: "/AddEvent",

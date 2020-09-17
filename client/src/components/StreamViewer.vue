@@ -2,7 +2,7 @@
   <div class="viewerWindow">
     <div>
       <h1>{{channel.name}}</h1>
-      <h4 class="text-muted">Stream Embed currently non-functional until SSL implemented</h4>
+      <h4 class="text-muted">Stream Embed may be non-functional until SSL implemented</h4>
     </div>
     <button class="btn btn-dark myButton bg-danger" v-on:click="$emit('clear')">X</button>
     <div class="wrapper">

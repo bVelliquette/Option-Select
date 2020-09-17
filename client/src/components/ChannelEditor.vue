@@ -1,5 +1,6 @@
 <template>
   <div class="form-container">
+    <button class="btn btn-dark myButton bg-danger" v-on:click="$emit('clear')">X</button>
     <form action>
       <div class="form-group">
         <label for="channel-name">Name</label>
@@ -27,7 +28,7 @@
         </div>
       </div>
     </form>
-    <button class="btn btn-dark" v-on:click="$emit('update', tempChannel)">{{action}}</button>
+    <button class="btn btn-dark" v-on:click="$emit('update', tempChannel)">{{actionLabel()}}</button>
   </div>
 </template>
 
@@ -46,11 +47,27 @@ export default {
     };
   },
   created() {
-      if(this.action == "Edit")
-        this.tempChannel = {...this.channel};
+    if (this.action == "Edit") this.tempChannel = { ...this.channel };
   },
+  methods: {
+    actionLabel() {
+      if (this.action == "Create") return "Create";
+      else return "Apply changes";
+    }
+  }
 };
 </script>
 
 <style scoped>
+.myButton {
+  position: absolute;
+  top: .2em;
+  right: 1em;
+  height: 1.7em;
+  width: 1.7em;
+  padding: .1em;
+  border-radius: 20%;
+  opacity: 0.7;
+  overflow: hidden;
+}
 </style>

@@ -104,17 +104,23 @@ export default {
       let startTime = new Date(block.startTime);
       let endTime = new Date(block.endTime);
       let start =
-        startTime.getUTCHours() * 4 +
-        Math.floor(startTime.getUTCMinutes() / 15) +
-        1 -
-        40; // +1 because CSS Grids start at 1 and -40 to shift left 10 hours;
+        Math.floor(
+          (startTime.getTime() - this.event.startDate.getTime()) /
+            (1000 * 60 * 60)
+        ) *
+          4 +
+        Math.floor(startTime.getMinutes() / 15) -
+        (this.currentDay - 1) * 24 * 4 +
+        1; //+1 because CSS grid starts at one
       let end =
-        endTime.getUTCHours() * 4 +
-        Math.floor(endTime.getUTCMinutes() / 15) +
-        1 -
-        40; // +1 because CSS Grids start at 1 and -40 to shift left 10 hours;
-
-      //Shifting left 10 hours allows the window to begin at 6AM EDT
+        Math.floor(
+          (endTime.getTime() - this.event.startDate.getTime()) /
+            (1000 * 60 * 60)
+        ) *
+          4 +
+        Math.floor(endTime.getMinutes() / 15) -
+        (this.currentDay - 1) * 24 * 4 +
+        1; //+1 because CSS grid starts at one
 
       return {
         "grid-row": `${channelIndex + 2}`,
@@ -157,9 +163,9 @@ export default {
     },
     returnTime(n) {
       if (n % 4 != 1) return;
-      n += 10 * 4; //Shift the time labels so that the Window starts at 6AM EDT
-      let time = this.addDays(this.startDate, this.currentDay - 1);
-      time.setUTCHours(Math.floor(n / 4));
+      n += this.event.startDate.getHours() * 4;
+      let time = this.addDays(this.event.startDate, this.currentDay - 1);
+      time.setHours(Math.floor(n / 4));
       let timeString = "";
       if (time.getHours() % 12 == 0) timeString = "12:00";
       else timeString = `${time.getHours() % 12}:00`;
@@ -243,7 +249,7 @@ export default {
   color: black;
   font-size: 100%;
   overflow: hidden;
-  padding-top: .5em;
+  padding-top: 0.5em;
 }
 .timeBlock > p {
   margin: 0;
@@ -272,6 +278,6 @@ export default {
 }
 
 .dropdown-item:hover {
-  background-color:#222
+  background-color: #222;
 }
 </style>
